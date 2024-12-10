@@ -39,7 +39,7 @@ def walk(trailhead, trailmap):
 
         for nx, ny in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
             if trailmap.get((x + nx, y + ny)) == curval + 1:
-                print((x, y, curval), (x + nx, y + ny, trailmap.get((x + nx, y + ny))))
+                #print((x, y, curval), (x + nx, y + ny, trailmap.get((x + nx, y + ny))))
                 bfs_q.append((x + nx, y + ny))
 
     return score, rating
