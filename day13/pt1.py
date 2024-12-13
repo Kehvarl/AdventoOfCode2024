@@ -1,7 +1,7 @@
 from collections import defaultdict, deque
 from pprint import pprint
 
-with open("input.txt") as f:
+with open("test.txt") as f:
     content = f.read().strip().split("\n\n")
     # content = [x.strip() for x in f.readlines()]
     # content = [int(x) for x in f.readlines()]
@@ -25,11 +25,8 @@ for ba, bb, pr in machines:
     bx, by = bb
     px, py = pr
     a = (px * by - py * bx) / (ax * by - ay * bx)
-    if a != int(a):
-        continue
-
-    b = (py - ay * a) // by
-    if a == int(a) and b == int(b):
+    if a == int(a):
+        b = (py - ay * a) // by
         a_tokens += int(a)
         b_tokens += int(b)
 
