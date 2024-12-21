@@ -2,7 +2,7 @@ from collections import defaultdict, deque
 from pprint import pprint
 from queue import Queue
 
-with open("test.txt") as f:
+with open("input.txt") as f:
     content = [x.strip() for x in f.readlines()]
     # content = [int(x) for x in f.readlines()]
 
@@ -44,32 +44,25 @@ def bfs(walls, start, end,  w, h):
     return None
 
 
+def draw_map():
+    for y, v1 in enumerate(content):
+        line = ""
+        for x, v2 in enumerate(v1):
+            if (x, y) in path and v2 not in ["E", "S"]:
+                line += "O"
+            else:
+                line += v2
+        print(line)
+
+
 path = bfs(walls, start, end, len(content[0]), len(content))
-reverse_path = bfs(walls, end, start, len(content[0]), len(content))
 print(len(path))
-print(path)
 
-for y, v1 in enumerate(content):
-    line = ""
-    for x, v2 in enumerate(v1):
-        if (x, y) in path and v2 not in ["E", "S"]:
-            line += "O"
-        else:
-            line += v2
-    print(line)
+skips = 0
 
-skips = defaultdict(int)
-for i, pos in enumerate(path[:-2]):
-    px, py = pos
-    for ii, p2 in enumerate(path[i+1:]):
-        diff = ii - i
-        p2x, p2y = p2
-        if p2x == px or p2y == py:
-            dx = abs(px - p2x)
-            dy = abs(py - p2y)
-        if dx + dy <= 2:
-            saved = diff - (dx + dy)
-            skips[saved] += 1
-
-pprint(skips)
-print(len(skips))
+count = 0
+for i,j in path:
+    for di,dj in [[-1,0],[0,-1],[0,1],[1,0]]:
+        if (i+di,j+dj) not in path and (i+2*di,j+2*dj) in path and path[(i+2*di,j+2*dj)]-path[(i,j)]>=102:
+            count += 1
+print(skips)
