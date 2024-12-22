@@ -69,11 +69,15 @@ def bfs(start, end, w, h, exclude):
 
         if (x, y) == end:
             return path, buttons
+        if buttons == []:
+            neighbors = [(0, 1, "v"), (0, -1, "^"), (1, 0, ">"), (-1, 0, "<")]
+        else:
+            neighbors = [buttons[-1], (0, 1, "v"), (0, -1, "^"), (1, 0, ">"), (-1, 0, "<")]
 
-        for dx, dy, d in [(0, 1, "v"), (0, -1, "^"), (1, 0, ">"), (-1, 0, "<")]:
+        for dx, dy, d in neighbors:
             tx, ty = x + dx, y + dy
             if (0 <= ty < h and 0 <= tx < w) and ((tx, ty) not in path) and (tx, ty) not in exclude:
-                bfs_q.put(((tx, ty), path + [(tx, ty)], buttons +[(d)]))
+                bfs_q.put(((tx, ty), path + [(tx, ty)], buttons +[(dx, dy, d)]))
                 visited.add((tx, ty))
     return None
 
@@ -88,7 +92,7 @@ robot3pos = (2, 0)
 r3x, r3y = robot2pos
 total = 0
 
-for code in ["980A"]:
+for code in ["379A"]:
     print(code)
     moves = []
     moves2 = []
@@ -101,7 +105,8 @@ for code in ["980A"]:
         if (r1x, r1y) != (cx, cy):
             path, buttons = bfs((r1x, r1y), (cx, cy), 3, 4, [(0, 3)])
             #print(char, cx, cy, path)
-            moves.extend(buttons)
+            for b in buttons:
+                moves.append(b[2])
             (r1x, r1y) = (cx, cy)
         moves.append("A")
         outcode += reverse_keypad1[(r1x, r1y)]
@@ -110,7 +115,8 @@ for code in ["980A"]:
         if (r2x, r2y) != (mx, my):
             path, buttons = bfs((r2x, r2y), (mx, my), 3, 2, [(0, 0)])
             #print(char, move, (r2x, r2y), (mx, my), buttons)
-            moves2.extend(buttons)
+            for b in buttons:
+                moves2.append(b[2])
             (r2x, r2y) = (mx, my)
         moves2.append("A")
         outcode2 += reverse_keypad2[(r2x, r2y)]
@@ -120,7 +126,8 @@ for code in ["980A"]:
         if (r3x, r3y) != (m2x, m2y):
             path, buttons = bfs((r3x, r3y), (m2x, m2y), 3, 2, [(0, 0)])
             #print(move2, (r3x, r3y), (m2x, m2y), path)
-            moves3.extend(buttons)
+            for b in buttons:
+                moves3.append(b[2])
             (r3x, r3y) = (m2x, m2y)
         moves3.append("A")
         #print(move2, "A")
@@ -128,16 +135,16 @@ for code in ["980A"]:
 
     total += len(moves2) * int(code.strip("A"))
 
-    print(moves)
+    #print(moves)
     #print(len(moves))
-    #print(outcode)
-    print(moves2)
+    print(outcode)
+    #print(moves2)
     #print(len(moves2))
     print(outcode2)
-    print("".join(moves))
+    #print("".join(moves))
     print(moves3)
     print(len(moves3))
     print(outcode3)
-    print("".join(moves2))
+    #print("".join(moves2))
     print("".join(moves3))
 print(total)
